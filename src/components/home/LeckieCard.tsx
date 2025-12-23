@@ -5,9 +5,10 @@ interface LeckieCardProps {
   id: string;
   label: string;
   quote: string;
+  image: string;
 }
 
-const LeckieCard = ({ id, label, quote }: LeckieCardProps) => {
+const LeckieCard = ({ id, label, quote, image }: LeckieCardProps) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -17,7 +18,7 @@ const LeckieCard = ({ id, label, quote }: LeckieCardProps) => {
 
   return (
     <div
-      className="leckie-card group relative w-40 md:w-44 cursor-pointer"
+      className="leckie-card group relative cursor-pointer"
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -39,33 +40,27 @@ const LeckieCard = ({ id, label, quote }: LeckieCardProps) => {
           border-t-[8px] border-t-secondary/95" />
       </div>
 
-      {/* Character Image Container */}
+      {/* Square Character Image Container */}
       <div
-        className={`relative h-56 md:h-64 bg-gradient-to-b from-secondary to-card 
-          flex items-center justify-center overflow-hidden rounded-xl
+        className={`relative aspect-square w-28 md:w-32 lg:w-36 overflow-hidden rounded-xl
           transition-all duration-300
-          ${isHovered ? "ring-2 ring-primary shadow-glow" : ""}`}
+          ${isHovered ? "ring-2 ring-primary shadow-glow scale-105" : ""}`}
       >
-        {/* Placeholder for character image */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`w-24 h-24 rounded-full bg-muted/30 flex items-center justify-center
-            transition-all duration-300 ${isHovered ? "scale-110 bg-primary/20" : ""}`}>
-            <span className={`text-3xl font-medium transition-colors duration-300
-              ${isHovered ? "text-primary" : "text-muted-foreground/50"}`}>
-              {label.slice(0, 2)}
-            </span>
-          </div>
-        </div>
+        <img 
+          src={image} 
+          alt={label}
+          className="w-full h-full object-cover"
+        />
 
         {/* Hover glow overlay */}
         <div className={`absolute inset-0 transition-opacity duration-300
-          bg-gradient-to-t from-primary/15 to-transparent
+          bg-gradient-to-t from-primary/20 to-transparent
           ${isHovered ? "opacity-100" : "opacity-0"}`} />
       </div>
 
       {/* Label */}
-      <div className="py-4 text-center">
-        <span className={`text-sm font-medium transition-colors duration-300
+      <div className="py-2 text-center">
+        <span className={`text-xs md:text-sm font-medium transition-colors duration-300
           ${isHovered ? "text-primary" : "text-foreground"}`}>
           {label}
         </span>
