@@ -47,7 +47,7 @@ const leckies = [
 
 const LeckieGrid = () => {
   return (
-    <div className="leckie-group grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6 stagger-children">
+    <div className="leckie-group grid grid-cols-3 gap-4 md:gap-6 stagger-children max-w-2xl">
       {leckies.map((leckie) => (
         <LeckieCard
           key={leckie.id}
