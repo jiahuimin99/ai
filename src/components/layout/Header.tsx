@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Lightbulb, TrendingUp, ThumbsUp, MessageCircle } from "lucide-react";
+import { Lightbulb, TrendingUp, ThumbsUp, MessageCircle, Home } from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
@@ -14,6 +14,17 @@ const Header = () => {
         毒舌审校员
       </Link>
       <nav className="flex items-center gap-5">
+        <Link 
+          to="/" 
+          className={`flex items-center gap-1.5 transition-colors duration-200 ${
+            isActive("/") 
+              ? "text-primary font-medium" 
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Home className={`w-4 h-4 ${isActive("/") ? "text-primary" : ""}`} />
+          <span className="hidden sm:inline">首页</span>
+        </Link>
         <Link 
           to="/concept" 
           className={`flex items-center gap-1.5 transition-colors duration-200 ${
