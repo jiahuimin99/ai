@@ -29,15 +29,10 @@ const LeckieCard = ({ id, label, quote, image }: LeckieCardProps) => {
 
   return (
     <div
-      className="leckie-card group relative cursor-pointer"
+      className={`leckie-card group relative cursor-pointer ${isHovered ? "z-10" : "z-1"}`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{ 
-        transform: isHovered ? "scale(1.18)" : "scale(1)",
-        transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-        zIndex: isHovered ? 10 : 1
-      }}
     >
       {/* Quote Bubble */}
       <div
