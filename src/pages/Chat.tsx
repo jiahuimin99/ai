@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, Send, Flame, Loader2 } from "lucide-react";
+import { Upload, Send, Flame, Loader2, RotateCcw } from "lucide-react";
 import leckieAvatar from "@/assets/leckie-avatar.png";
 import leckieCn from "@/assets/leckie-cn.png";
 import leckieEn from "@/assets/leckie-en.png";
@@ -31,6 +31,7 @@ interface LocaleData {
   score: string;
   review: string;
   reviewFire: string;
+  retryBtn: string;
 }
 
 const leckieData: Record<string, LocaleData> = {
@@ -51,6 +52,7 @@ const leckieData: Record<string, LocaleData> = {
     score: "23/100",
     review: "这写的什么东西？逻辑混乱，术语不统一，读者看完只会更困惑。回去重写。",
     reviewFire: "烂透了。0分起评都嫌多。这不是文档，这是在浪费读者生命。删了重来。",
+    retryBtn: "😭 重新挑战",
   },
   en: {
     label: "English Leckie",
@@ -69,6 +71,7 @@ const leckieData: Record<string, LocaleData> = {
     score: "23/100",
     review: "What is this mess? Incoherent logic, inconsistent terminology—readers will leave more confused than before. Rewrite it.",
     reviewFire: "Absolute garbage. A zero would be generous. This isn't documentation, it's a waste of the reader's time. Delete and start over.",
+    retryBtn: "😭 Try Again",
   },
   jp: {
     label: "日本語 Leckie",
@@ -87,6 +90,7 @@ const leckieData: Record<string, LocaleData> = {
     score: "23/100",
     review: "これは何ですか？ロジックがめちゃくちゃで、用語も統一されていません。読者は余計に混乱するだけです。書き直してください。",
     reviewFire: "最悪です。0点でも甘いくらい。これはドキュメントじゃない、読者の時間の無駄です。全部消してやり直し。",
+    retryBtn: "😭 再挑戦",
   },
   kr: {
     label: "한국어 Leckie",
@@ -105,6 +109,7 @@ const leckieData: Record<string, LocaleData> = {
     score: "23/100",
     review: "이게 뭐예요? 논리도 엉망이고 용어도 제각각이네요. 독자는 더 헷갈릴 뿐이에요. 다시 쓰세요.",
     reviewFire: "완전 쓰레기예요. 0점도 아까워요. 이건 문서가 아니라 독자 시간 낭비예요. 다 지우고 처음부터 다시 하세요.",
+    retryBtn: "😭 다시 도전",
   },
   pt: {
     label: "Português Leckie",
@@ -123,6 +128,7 @@ const leckieData: Record<string, LocaleData> = {
     score: "23/100",
     review: "O que é isso? Lógica confusa, terminologia inconsistente—o leitor vai sair mais perdido do que entrou. Reescreva.",
     reviewFire: "Lixo total. Zero já seria generoso demais. Isso não é documentação, é desperdício de tempo do leitor. Apaga tudo e começa de novo.",
+    retryBtn: "😭 Tentar Novamente",
   },
   id: {
     label: "Indonesia Leckie",
@@ -141,6 +147,7 @@ const leckieData: Record<string, LocaleData> = {
     score: "23/100",
     review: "Ini apa? Logikanya berantakan, istilahnya tidak konsisten—pembaca malah tambah bingung. Tulis ulang.",
     reviewFire: "Sampah total. Nol pun terlalu baik. Ini bukan dokumentasi, ini buang-buang waktu pembaca. Hapus semua dan mulai dari awal.",
+    retryBtn: "😭 Coba Lagi",
   },
 };
 
@@ -156,6 +163,14 @@ const Chat = () => {
 
   const handleFileUpload = () => {
     console.log("File upload triggered");
+  };
+
+  const handleRetry = () => {
+    setMessages([]);
+    setText("");
+    setHasSubmitted(false);
+    setIsThinking(false);
+    setFireMode(false);
   };
 
   const handleSubmit = () => {
@@ -305,42 +320,57 @@ const Chat = () => {
                 />
               </div>
 
-              {/* Input Row */}
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="flex-shrink-0 h-12 w-12"
-                  onClick={handleFileUpload}
-                  disabled={hasSubmitted}
-                >
-                  <Upload className="w-5 h-5" />
-                </Button>
-                <Textarea
-                  placeholder={leckie.placeholder}
-                  className="flex-1 min-h-[48px] max-h-32 resize-none bg-secondary/50 border-border focus:border-primary"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSubmit();
-                    }
-                  }}
-                  disabled={hasSubmitted}
-                />
-                <Button
-                  size="icon"
-                  className="flex-shrink-0 h-12 w-12 bg-primary text-primary-foreground hover:bg-primary/90"
-                  onClick={handleSubmit}
-                  disabled={!text.trim() || hasSubmitted}
-                >
-                  <Send className="w-5 h-5" />
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground text-center mt-2">
-                {leckie.supportedFormats}
-              </p>
+              {/* Input Row or Retry Button */}
+              {hasSubmitted && !isThinking ? (
+                <div className="flex justify-center">
+                  <Button
+                    variant="outline"
+                    className="gap-2 px-6 py-3 h-auto text-base border-primary/50 hover:bg-primary/10"
+                    onClick={handleRetry}
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    {leckie.retryBtn}
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="flex-shrink-0 h-12 w-12"
+                      onClick={handleFileUpload}
+                      disabled={hasSubmitted}
+                    >
+                      <Upload className="w-5 h-5" />
+                    </Button>
+                    <Textarea
+                      placeholder={leckie.placeholder}
+                      className="flex-1 min-h-[48px] max-h-32 resize-none bg-secondary/50 border-border focus:border-primary"
+                      value={text}
+                      onChange={(e) => setText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit();
+                        }
+                      }}
+                      disabled={hasSubmitted}
+                    />
+                    <Button
+                      size="icon"
+                      className="flex-shrink-0 h-12 w-12 bg-primary text-primary-foreground hover:bg-primary/90"
+                      onClick={handleSubmit}
+                      disabled={!text.trim() || hasSubmitted}
+                    >
+                      <Send className="w-5 h-5" />
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground text-center mt-2">
+                    {leckie.supportedFormats}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
