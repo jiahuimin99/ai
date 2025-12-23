@@ -18,10 +18,11 @@ const LeckieCard = ({ id, label, quote, image }: LeckieCardProps) => {
 
   return (
     <div
-      className="leckie-card group relative cursor-pointer"
+      className="leckie-card group relative cursor-pointer transition-transform duration-300 ease-out"
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={{ transform: isHovered ? "scale(1.15)" : "scale(1)" }}
     >
       {/* Quote Bubble */}
       <div
@@ -44,7 +45,7 @@ const LeckieCard = ({ id, label, quote, image }: LeckieCardProps) => {
       <div
         className={`relative aspect-square w-28 md:w-32 lg:w-36 overflow-hidden rounded-xl
           transition-all duration-300
-          ${isHovered ? "ring-2 ring-primary shadow-glow scale-105" : ""}`}
+          ${isHovered ? "ring-2 ring-primary shadow-glow-lg" : ""}`}
       >
         <img 
           src={image} 
@@ -54,7 +55,7 @@ const LeckieCard = ({ id, label, quote, image }: LeckieCardProps) => {
 
         {/* Hover glow overlay */}
         <div className={`absolute inset-0 transition-opacity duration-300
-          bg-gradient-to-t from-primary/20 to-transparent
+          bg-gradient-to-t from-primary/30 to-transparent
           ${isHovered ? "opacity-100" : "opacity-0"}`} />
       </div>
 
