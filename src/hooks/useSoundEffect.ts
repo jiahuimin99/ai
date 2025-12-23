@@ -1,72 +1,68 @@
 import { useCallback, useRef } from "react";
 
-// Web Audio API-based sci-fi hover sound - digital scan effect
+// Crisp metallic sci-fi activation sound
 export const useSoundEffect = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const playHoverSound = useCallback(() => {
     try {
-      // Create or reuse AudioContext
       if (!audioContextRef.current) {
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
       const ctx = audioContextRef.current;
       const now = ctx.currentTime;
 
-      // Create a more complex sci-fi sound with multiple layers
+      // Master output with compression for punch
+      const compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.setValueAtTime(-20, now);
+      compressor.ratio.setValueAtTime(8, now);
+      compressor.connect(ctx.destination);
+
       const masterGain = ctx.createGain();
-      masterGain.connect(ctx.destination);
-      masterGain.gain.setValueAtTime(0.12, now);
+      masterGain.gain.setValueAtTime(0.25, now);
+      masterGain.connect(compressor);
 
-      // Layer 1: Digital blip - square wave for that digital feel
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = "square";
-      osc1.frequency.setValueAtTime(1800, now);
-      osc1.frequency.exponentialRampToValueAtTime(2400, now + 0.03);
-      osc1.frequency.exponentialRampToValueAtTime(1600, now + 0.06);
-      gain1.gain.setValueAtTime(0, now);
-      gain1.gain.linearRampToValueAtTime(0.3, now + 0.01);
-      gain1.gain.linearRampToValueAtTime(0, now + 0.08);
-      osc1.connect(gain1);
-      gain1.connect(masterGain);
-      osc1.start(now);
-      osc1.stop(now + 0.08);
+      // Crisp metallic ping - high frequency sine with fast attack
+      const ping = ctx.createOscillator();
+      const pingGain = ctx.createGain();
+      ping.type = "sine";
+      ping.frequency.setValueAtTime(2800, now);
+      ping.frequency.exponentialRampToValueAtTime(1400, now + 0.15);
+      pingGain.gain.setValueAtTime(0.6, now);
+      pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      ping.connect(pingGain);
+      pingGain.connect(masterGain);
+      ping.start(now);
+      ping.stop(now + 0.15);
 
-      // Layer 2: Low frequency pulse for depth
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(150, now);
-      osc2.frequency.exponentialRampToValueAtTime(80, now + 0.1);
-      gain2.gain.setValueAtTime(0, now);
-      gain2.gain.linearRampToValueAtTime(0.4, now + 0.02);
-      gain2.gain.linearRampToValueAtTime(0, now + 0.1);
-      osc2.connect(gain2);
-      gain2.connect(masterGain);
-      osc2.start(now);
-      osc2.stop(now + 0.1);
+      // Metallic shimmer - triangle wave harmonic
+      const shimmer = ctx.createOscillator();
+      const shimmerGain = ctx.createGain();
+      shimmer.type = "triangle";
+      shimmer.frequency.setValueAtTime(4200, now);
+      shimmer.frequency.exponentialRampToValueAtTime(2100, now + 0.1);
+      shimmerGain.gain.setValueAtTime(0.15, now);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      shimmer.connect(shimmerGain);
+      shimmerGain.connect(masterGain);
+      shimmer.start(now);
+      shimmer.stop(now + 0.1);
 
-      // Layer 3: High frequency shimmer
-      const osc3 = ctx.createOscillator();
-      const gain3 = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-      filter.type = "highpass";
-      filter.frequency.setValueAtTime(3000, now);
-      osc3.type = "sawtooth";
-      osc3.frequency.setValueAtTime(4000, now);
-      osc3.frequency.exponentialRampToValueAtTime(6000, now + 0.05);
-      gain3.gain.setValueAtTime(0, now);
-      gain3.gain.linearRampToValueAtTime(0.08, now + 0.01);
-      gain3.gain.linearRampToValueAtTime(0, now + 0.06);
-      osc3.connect(filter);
-      filter.connect(gain3);
-      gain3.connect(masterGain);
-      osc3.start(now);
-      osc3.stop(now + 0.06);
+      // Sub bass thump for weight
+      const bass = ctx.createOscillator();
+      const bassGain = ctx.createGain();
+      bass.type = "sine";
+      bass.frequency.setValueAtTime(100, now);
+      bass.frequency.exponentialRampToValueAtTime(60, now + 0.08);
+      bassGain.gain.setValueAtTime(0.5, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      bass.connect(bassGain);
+      bassGain.connect(masterGain);
+      bass.start(now);
+      bass.stop(now + 0.08);
 
     } catch (error) {
-      // Silently fail if audio is not supported
+      // Silent fail
     }
   }, []);
 
