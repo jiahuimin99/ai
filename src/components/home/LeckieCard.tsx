@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSoundEffect } from "@/hooks/useSoundEffect";
 
 interface LeckieCardProps {
   id: string;
@@ -11,18 +12,32 @@ interface LeckieCardProps {
 const LeckieCard = ({ id, label, quote, image }: LeckieCardProps) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const { playHoverSound } = useSoundEffect();
 
   const handleClick = () => {
     navigate(`/chat/${id}`);
   };
 
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    playHoverSound();
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return (
     <div
-      className="leckie-card group relative cursor-pointer transition-transform duration-300 ease-out"
+      className="leckie-card group relative cursor-pointer"
       onClick={handleClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{ transform: isHovered ? "scale(1.15)" : "scale(1)" }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{ 
+        transform: isHovered ? "scale(1.18)" : "scale(1)",
+        transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        zIndex: isHovered ? 10 : 1
+      }}
     >
       {/* Quote Bubble */}
       <div
