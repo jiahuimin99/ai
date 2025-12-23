@@ -4,7 +4,7 @@ import LeckieGrid from "@/components/home/LeckieGrid";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-background relative overflow-hidden">
+    <div className="h-screen flex flex-col bg-background relative overflow-hidden">
       {/* Rotating Earth Background */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div 
@@ -32,19 +32,19 @@ const Index = () => {
       
       <Header />
       
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-12 relative z-10 pt-24">
+      <main className="flex-1 flex flex-col items-center justify-center px-6 py-4 relative z-10 pt-20">
         {/* Main Title */}
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-medium text-center mb-4 animate-fade-in glow-text max-w-3xl leading-relaxed">
+        <h1 className="text-lg md:text-xl lg:text-2xl font-medium text-center mb-2 animate-fade-in glow-text max-w-3xl leading-relaxed">
           如果你的文档经不起"骂"，那它也经不起用户的审视。
         </h1>
         
         {/* Subtitle Line 1 */}
-        <p className="text-base md:text-lg text-center text-foreground/80 mb-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <p className="text-sm md:text-base text-center text-foreground/80 mb-1 animate-fade-in" style={{ animationDelay: "0.1s" }}>
           一个不留情面的毒舌审校员，替你拦住烂文档。
         </p>
         
         {/* Subtitle Line 2 - smaller */}
-        <p className="text-xs md:text-sm text-center text-muted-foreground mb-12 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+        <p className="text-xs text-center text-muted-foreground mb-8 animate-fade-in" style={{ animationDelay: "0.15s" }}>
           AI Leckie: one Leckie becomes many, but the standard remains one.
         </p>
 
@@ -52,7 +52,7 @@ const Index = () => {
         <LeckieGrid />
 
         {/* Hint */}
-        <p className="mt-10 text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.5s" }}>
+        <p className="mt-6 text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.5s" }}>
           选择你的 AI Leckie
         </p>
       </main>

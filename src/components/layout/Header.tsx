@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { Lightbulb, TrendingUp, ThumbsUp, Skull } from "lucide-react";
+import { Lightbulb, TrendingUp, ThumbsUp, MessageCircle } from "lucide-react";
 
 const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 md:px-8 py-4 text-sm bg-background/80 backdrop-blur-md border-b border-border/50">
       <Link to="/" className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-2">
-        <Skull className="w-5 h-5 text-primary" />
+        <MessageCircle className="w-5 h-5 text-primary" />
         毒舌审校员
       </Link>
       <nav className="flex items-center gap-5">

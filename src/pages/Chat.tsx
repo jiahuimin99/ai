@@ -5,11 +5,18 @@ import Footer from "@/components/layout/Footer";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, Send, Flame } from "lucide-react";
+import { Upload, Send, Flame, Loader2 } from "lucide-react";
 import leckieAvatar from "@/assets/leckie-avatar.png";
+import leckieCn from "@/assets/leckie-cn.png";
+import leckieEn from "@/assets/leckie-en.png";
+import leckieJp from "@/assets/leckie-jp.png";
+import leckieKr from "@/assets/leckie-kr.png";
+import leckiePt from "@/assets/leckie-pt.png";
+import leckieId from "@/assets/leckie-id.png";
 
 interface LocaleData {
   label: string;
+  portrait: string;
   opening: string;
   openingFire: string;
   submitDoc: string;
@@ -20,6 +27,7 @@ interface LocaleData {
   placeholder: string;
   supportedFormats: string;
   you: string;
+  thinking: string;
   score: string;
   review: string;
   reviewFire: string;
@@ -28,6 +36,7 @@ interface LocaleData {
 const leckieData: Record<string, LocaleData> = {
   cn: {
     label: "中文 Leckie",
+    portrait: leckieCn,
     opening: "把文档发过来，我看看你写了什么。",
     openingFire: "发过来。少废话。",
     submitDoc: "提交文档",
@@ -38,12 +47,14 @@ const leckieData: Record<string, LocaleData> = {
     placeholder: "粘贴文本内容（支持 Markdown）...",
     supportedFormats: "支持 PDF / Word / TXT · Enter 发送 · Shift+Enter 换行",
     you: "我",
+    thinking: "正在审阅中，请稍候...",
     score: "23/100",
     review: "这写的什么东西？逻辑混乱，术语不统一，读者看完只会更困惑。回去重写。",
     reviewFire: "烂透了。0分起评都嫌多。这不是文档，这是在浪费读者生命。删了重来。",
   },
   en: {
     label: "English Leckie",
+    portrait: leckieEn,
     opening: "Let's see what you've got. Paste your document below.",
     openingFire: "Drop it. Let's get this over with.",
     submitDoc: "Submit Document",
@@ -54,12 +65,14 @@ const leckieData: Record<string, LocaleData> = {
     placeholder: "Paste your text content (Markdown supported)...",
     supportedFormats: "Supports PDF / Word / TXT · Enter to send · Shift+Enter for new line",
     you: "Me",
+    thinking: "Reviewing your document, please wait...",
     score: "23/100",
     review: "What is this mess? Incoherent logic, inconsistent terminology—readers will leave more confused than before. Rewrite it.",
     reviewFire: "Absolute garbage. A zero would be generous. This isn't documentation, it's a waste of the reader's time. Delete and start over.",
   },
   jp: {
     label: "日本語 Leckie",
+    portrait: leckieJp,
     opening: "ドキュメントを見せてください。チェックします。",
     openingFire: "早く出して。時間がないんで。",
     submitDoc: "ドキュメントを提出",
@@ -70,12 +83,14 @@ const leckieData: Record<string, LocaleData> = {
     placeholder: "テキストを貼り付けてください（Markdown対応）...",
     supportedFormats: "PDF / Word / TXT対応 · Enterで送信 · Shift+Enterで改行",
     you: "私",
+    thinking: "確認中です、しばらくお待ちください...",
     score: "23/100",
     review: "これは何ですか？ロジックがめちゃくちゃで、用語も統一されていません。読者は余計に混乱するだけです。書き直してください。",
     reviewFire: "最悪です。0点でも甘いくらい。これはドキュメントじゃない、読者の時間の無駄です。全部消してやり直し。",
   },
   kr: {
     label: "한국어 Leckie",
+    portrait: leckieKr,
     opening: "문서 보여주세요. 검토해 드릴게요.",
     openingFire: "빨리 보내세요. 할 일이 많아요.",
     submitDoc: "문서 제출",
@@ -86,12 +101,14 @@ const leckieData: Record<string, LocaleData> = {
     placeholder: "텍스트를 붙여넣으세요 (마크다운 지원)...",
     supportedFormats: "PDF / Word / TXT 지원 · Enter로 전송 · Shift+Enter로 줄바꿈",
     you: "나",
+    thinking: "검토 중입니다. 잠시만 기다려 주세요...",
     score: "23/100",
     review: "이게 뭐예요? 논리도 엉망이고 용어도 제각각이네요. 독자는 더 헷갈릴 뿐이에요. 다시 쓰세요.",
     reviewFire: "완전 쓰레기예요. 0점도 아까워요. 이건 문서가 아니라 독자 시간 낭비예요. 다 지우고 처음부터 다시 하세요.",
   },
   pt: {
     label: "Português Leckie",
+    portrait: leckiePt,
     opening: "Me mostra o documento. Vou dar uma olhada.",
     openingFire: "Manda logo. Não tenho o dia todo.",
     submitDoc: "Enviar Documento",
@@ -102,12 +119,14 @@ const leckieData: Record<string, LocaleData> = {
     placeholder: "Cole o texto aqui (Markdown suportado)...",
     supportedFormats: "Suporta PDF / Word / TXT · Enter para enviar · Shift+Enter nova linha",
     you: "Eu",
+    thinking: "Revisando o documento, aguarde...",
     score: "23/100",
     review: "O que é isso? Lógica confusa, terminologia inconsistente—o leitor vai sair mais perdido do que entrou. Reescreva.",
     reviewFire: "Lixo total. Zero já seria generoso demais. Isso não é documentação, é desperdício de tempo do leitor. Apaga tudo e começa de novo.",
   },
   id: {
     label: "Indonesia Leckie",
+    portrait: leckieId,
     opening: "Kirim dokumennya. Saya akan periksa.",
     openingFire: "Kirim sekarang. Jangan buang waktu.",
     submitDoc: "Kirim Dokumen",
@@ -118,6 +137,7 @@ const leckieData: Record<string, LocaleData> = {
     placeholder: "Tempel teks di sini (Markdown didukung)...",
     supportedFormats: "Mendukung PDF / Word / TXT · Enter untuk kirim · Shift+Enter baris baru",
     you: "Saya",
+    thinking: "Sedang meninjau dokumen, harap tunggu...",
     score: "23/100",
     review: "Ini apa? Logikanya berantakan, istilahnya tidak konsisten—pembaca malah tambah bingung. Tulis ulang.",
     reviewFire: "Sampah total. Nol pun terlalu baik. Ini bukan dokumentasi, ini buang-buang waktu pembaca. Hapus semua dan mulai dari awal.",
@@ -130,6 +150,7 @@ const Chat = () => {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState<Array<{ role: "leckie" | "user"; content: string }>>([]);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
 
   const leckie = leckieData[locale] || leckieData.cn;
 
@@ -142,9 +163,11 @@ const Chat = () => {
       setMessages((prev) => [...prev, { role: "user", content: text }]);
       setText("");
       setHasSubmitted(true);
+      setIsThinking(true);
       
-      // Simulate Leckie response with score
+      // Simulate API call with thinking state
       setTimeout(() => {
+        setIsThinking(false);
         setMessages((prev) => [
           ...prev,
           {
@@ -152,7 +175,7 @@ const Chat = () => {
             content: `📊 ${leckie.score}\n\n${fireMode ? leckie.reviewFire : leckie.review}`,
           },
         ]);
-      }, 800);
+      }, 2500);
     }
   };
 
@@ -172,7 +195,7 @@ const Chat = () => {
             {/* Image container */}
             <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-primary/60 bg-secondary">
               <img 
-                src={leckieAvatar} 
+                src={leckie.portrait} 
                 alt={leckie.label}
                 className="w-full h-full object-cover"
               />
@@ -244,6 +267,22 @@ const Chat = () => {
                   </div>
                 </div>
               ))}
+
+              {/* Thinking indicator */}
+              {isThinking && (
+                <div className="flex items-start gap-4 animate-fade-in">
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-primary/40">
+                    <img src={leckieAvatar} alt={leckie.label} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <p className="text-xs text-muted-foreground mb-2">{leckie.label}</p>
+                    <div className="bg-card rounded-2xl rounded-tl-md px-5 py-4 inline-flex items-center gap-3 border border-border shadow-card">
+                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                      <p className="text-base text-muted-foreground">{leckie.thinking}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
