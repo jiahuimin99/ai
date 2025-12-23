@@ -6,24 +6,27 @@ const Concept = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
 
-      <main className="flex-1 flex justify-center px-6 py-12">
-        <div className="max-w-3xl w-full flex flex-col gap-14">
+      <main className="flex-1 flex justify-center px-6 py-12 pt-28">
+        <div className="max-w-3xl w-full flex flex-col gap-12">
           {/* Section 1: Why */}
           <section className="section-card animate-fade-in">
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
               Why AI Leckie
             </p>
             <h2 className="text-xl md:text-2xl leading-relaxed mb-6">
-              文档写完就发布，问题留给用户发现。
-              <br />
-              <span className="text-accent-glow">Leckie 不接受这种流程。</span>
+              为什么需要 AI Leckie
             </h2>
-            <p className="text-sm md:text-base text-foreground/80 leading-relaxed">
-              技术文档的国际化远不只是语言翻译。用户在不同地区、不同语境下阅读同一份文档，
-              感受到的清晰度、可信度、甚至专业程度都可能截然不同。传统审校依赖人工抽查，
-              无法覆盖所有细节。Leckie 的使命是让每一篇文档在发布前，都经过一次真正严格的审视——
-              不是为了挑刺，而是为了让读者少踩一个坑。
-            </p>
+            <div className="text-sm md:text-base text-foreground/80 leading-relaxed space-y-4">
+              <p>
+                文档国际化不是"把中文翻成英文"。真正难的是：在多人协作、快速迭代、模块化膨胀的现实里，把同一套产品能力讲成<span className="text-accent-glow">「全球用户一眼就懂、用起来不劝退」</span>的标准化叙事。
+              </p>
+              <p>
+                EdgeOne 的文档复杂度在飙升：功能多、链路长、边界多；各模块由不同产品经理各自维护，很难天然对齐结构、术语和表达习惯。国际化进一步放大差异：同一概念在不同语言里，读者预期完全不同，错误也更致命。
+              </p>
+              <p>
+                于是我们做了 AI Leckie：一个"毒舌但讲理"的审校员，把经验从人的脑子里抽出来，变成可复用的标准与流程。
+              </p>
+            </div>
           </section>
 
           {/* Section 2: What */}
@@ -32,47 +35,61 @@ const Concept = () => {
               What Leckie Reviews
             </p>
             <h2 className="text-xl md:text-2xl leading-relaxed mb-6">
-              不是检查语法，
-              <br />
-              <span className="text-accent-glow">是检查你有没有在替读者思考。</span>
+              Leckie 在审什么
             </h2>
+            <p className="text-sm md:text-base text-foreground/80 leading-relaxed mb-6">
+              我们复盘历史 Review，把"感觉"固化成五条硬标准（从上到下，越靠前越致命）：
+            </p>
             
-            <div className="flex flex-col gap-5 mt-6">
-              <div className="pl-5 border-l-2 border-line">
-                <h4 className="text-sm font-medium text-foreground mb-1">结构逻辑</h4>
-                <p className="text-sm text-muted-foreground">段落之间是否有清晰的递进关系，读者是否能顺着你的思路走完全程。</p>
+            <div className="flex flex-col gap-5">
+              <div className="pl-5 border-l-2 border-primary/40">
+                <h4 className="text-sm font-medium text-foreground mb-1">1. 结构是否清晰</h4>
+                <p className="text-sm text-muted-foreground">用户能不能在开头 10 秒知道：是什么、谁能用、为什么要用、有什么限制/风险。核心信息不许埋深处。</p>
               </div>
-              <div className="pl-5 border-l-2 border-line">
-                <h4 className="text-sm font-medium text-foreground mb-1">术语一致性</h4>
-                <p className="text-sm text-muted-foreground">同一个概念是否在文档中使用了多种表述，造成理解混乱。</p>
+              <div className="pl-5 border-l-2 border-primary/40">
+                <h4 className="text-sm font-medium text-foreground mb-1">2. 表达是否清楚</h4>
+                <p className="text-sm text-muted-foreground">少绕弯、少背景堆砌、步骤像步骤。写给终端用户，避免敝帚自珍。</p>
               </div>
-              <div className="pl-5 border-l-2 border-line">
-                <h4 className="text-sm font-medium text-foreground mb-1">地域适配</h4>
-                <p className="text-sm text-muted-foreground">表达方式、示例、数据格式是否符合目标读者的习惯与期待。</p>
+              <div className="pl-5 border-l-2 border-primary/40">
+                <h4 className="text-sm font-medium text-foreground mb-1">3. 内容是否完整且准确</h4>
+                <p className="text-sm text-muted-foreground">参数、边界条件、行为差异、失败后果必须交代；示例必须可复现；产品更新后文档必须同步，否则就是误导。</p>
               </div>
-              <div className="pl-5 border-l-2 border-line">
-                <h4 className="text-sm font-medium text-foreground mb-1">可操作性</h4>
-                <p className="text-sm text-muted-foreground">步骤描述是否足够明确，用户能否按照指引完成操作而不产生歧义。</p>
+              <div className="pl-5 border-l-2 border-primary/40">
+                <h4 className="text-sm font-medium text-foreground mb-1">4. 是否站在用户视角</h4>
+                <p className="text-sm text-muted-foreground">不是"秀肌肉/功能有什么"，而是"用户怎么做、做到什么程度算成功、遇到问题怎么办"。新手要有综述，进阶要有细节。</p>
+              </div>
+              <div className="pl-5 border-l-2 border-primary/40">
+                <h4 className="text-sm font-medium text-foreground mb-1">5. 一致性是否达标</h4>
+                <p className="text-sm text-muted-foreground">术语、命名、结构和惯用表达要统一，避免同一概念多种叫法制造认知负担。</p>
               </div>
             </div>
           </section>
 
-          {/* Section 3: Core Problem */}
+          {/* Section 3: What we want to prove */}
           <section className="section-card animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
-              The Core Problem
+              What We Want to Prove
             </p>
             <h2 className="text-xl md:text-2xl leading-relaxed mb-6">
-              把"这里好像哪里不对"，
-              <br />
-              <span className="text-accent-glow">变成"这里具体有什么问题，怎么改"。</span>
+              我们想证明什么
             </h2>
-            <p className="text-sm md:text-base text-foreground/80 leading-relaxed">
-              传统审校反馈常常模糊：这段话读起来怪怪的，那个词用得不太对。
-              这种反馈让作者无从下手。Leckie 的每一条审校意见都必须具体、可执行——
-              指出问题、解释原因、给出建议。如果连 Leckie 都说不清楚问题在哪，
-              那就不算问题。
-            </p>
+            <div className="flex flex-col gap-5">
+              <div className="pl-5 border-l-2 border-primary/40">
+                <p className="text-sm md:text-base text-foreground/80">
+                  <span className="text-foreground font-medium">审校是可以被工程化的：</span>把经验变成规则，把规则变成可执行工作流。
+                </p>
+              </div>
+              <div className="pl-5 border-l-2 border-primary/40">
+                <p className="text-sm md:text-base text-foreground/80">
+                  <span className="text-foreground font-medium">国际化是标准化的放大镜：</span>一旦不清晰、不一致、不完整，跨语言会立刻翻车。
+                </p>
+              </div>
+              <div className="pl-5 border-l-2 border-primary/40">
+                <p className="text-sm md:text-base text-foreground/80">
+                  <span className="text-foreground font-medium">AI Leckie 的目标是：</span>让文档能被全球用户快速理解、放心集成、少走弯路。
+                </p>
+              </div>
+            </div>
           </section>
         </div>
       </main>
