@@ -44,90 +44,145 @@ const Chat = () => {
   const { locale = "cn" } = useParams<{ locale: string }>();
   const [fireMode, setFireMode] = useState(false);
   const [text, setText] = useState("");
+  const [messages, setMessages] = useState<Array<{ role: "leckie" | "user"; content: string }>>([]);
 
   const leckie = leckieData[locale] || leckieData.cn;
 
   const handleFileUpload = () => {
-    // File upload logic would go here
     console.log("File upload triggered");
   };
 
   const handleSubmit = () => {
     if (text.trim()) {
-      console.log("Submitting text for review:", text);
+      setMessages((prev) => [...prev, { role: "user", content: text }]);
+      setText("");
+      // Simulate Leckie response
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "leckie",
+            content: fireMode
+              ? "这写的什么东西？重写。"
+              : "让我仔细看看这段内容...",
+          },
+        ]);
+      }, 800);
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header showBack />
+      <Header />
 
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 md:p-8">
-        {/* Left: Leckie Panel */}
-        <div className="section-card flex flex-col items-center justify-center">
-          {/* Character placeholder */}
-          <div className="w-full max-w-sm h-80 md:h-96 rounded-xl bg-gradient-to-b from-secondary to-card flex items-center justify-center mb-6">
-            <div className="w-32 h-32 rounded-full bg-muted/30 flex items-center justify-center">
-              <span className="text-4xl font-medium text-muted-foreground/50">
-                {leckie.label.slice(0, 2)}
-              </span>
+      <main className="flex-1 flex flex-col pt-16">
+        {/* Chat Messages Area */}
+        <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6">
+          <div className="max-w-3xl mx-auto space-y-6">
+            {/* Leckie Opening Message */}
+            <div className="flex items-start gap-4 animate-fade-in">
+              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 ring-2 ring-primary/40">
+                <span className="text-sm font-medium text-primary">
+                  {leckie.label.slice(0, 2)}
+                </span>
+              </div>
+              <div className="flex-1 pt-1">
+                <p className="text-xs text-muted-foreground mb-2">{leckie.label}</p>
+                <div className="bg-card rounded-2xl rounded-tl-md px-5 py-4 inline-block max-w-lg border border-border shadow-card">
+                  <p className="text-base leading-relaxed">
+                    {fireMode ? leckie.openingFire : leckie.opening}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Opening line */}
-          <p className="text-base md:text-lg text-center leading-relaxed max-w-md">
-            {fireMode ? leckie.openingFire : leckie.opening}
-          </p>
+            {/* Message History */}
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`flex items-start gap-4 animate-fade-in ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+              >
+                {msg.role === "leckie" ? (
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 ring-2 ring-primary/40">
+                    <span className="text-sm font-medium text-primary">
+                      {leckie.label.slice(0, 2)}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-medium text-muted-foreground">我</span>
+                  </div>
+                )}
+                <div className={`flex-1 pt-1 ${msg.role === "user" ? "text-right" : ""}`}>
+                  {msg.role === "leckie" && (
+                    <p className="text-xs text-muted-foreground mb-2">{leckie.label}</p>
+                  )}
+                  <div
+                    className={`rounded-2xl px-5 py-4 inline-block max-w-lg border shadow-card ${
+                      msg.role === "user"
+                        ? "bg-primary/10 border-primary/30 rounded-tr-md"
+                        : "bg-card border-border rounded-tl-md"
+                    }`}
+                  >
+                    <p className="text-base leading-relaxed whitespace-pre-wrap text-left">{msg.content}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Right: Input Panel */}
-        <div className="input-panel flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">提交文档</h3>
-            
+        {/* Input Area - Fixed at bottom */}
+        <div className="border-t border-border bg-card/80 backdrop-blur-sm px-4 md:px-8 py-4">
+          <div className="max-w-3xl mx-auto">
             {/* Fire Mode Toggle */}
-            <div className="flex items-center gap-3">
-              <Flame className={`w-4 h-4 transition-colors ${fireMode ? "text-destructive" : "text-muted-foreground"}`} />
-              <span className="text-sm text-muted-foreground">火力全开</span>
+            <div className="flex items-center justify-end gap-3 mb-3">
+              <Flame
+                className={`w-4 h-4 transition-colors ${fireMode ? "text-destructive" : "text-muted-foreground"}`}
+              />
+              <span className="text-xs text-muted-foreground">火力全开</span>
               <Switch
                 checked={fireMode}
                 onCheckedChange={setFireMode}
                 className="data-[state=checked]:bg-destructive"
               />
             </div>
+
+            {/* Input Row */}
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                size="icon"
+                className="flex-shrink-0 h-12 w-12"
+                onClick={handleFileUpload}
+              >
+                <Upload className="w-5 h-5" />
+              </Button>
+              <Textarea
+                placeholder="粘贴文本内容（支持 Markdown）..."
+                className="flex-1 min-h-[48px] max-h-32 resize-none bg-secondary/50 border-border focus:border-primary"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit();
+                  }
+                }}
+              />
+              <Button
+                size="icon"
+                className="flex-shrink-0 h-12 w-12 bg-primary text-primary-foreground hover:bg-primary/90"
+                onClick={handleSubmit}
+                disabled={!text.trim()}
+              >
+                <Send className="w-5 h-5" />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground text-center mt-2">
+              支持 PDF / Word / TXT · Enter 发送 · Shift+Enter 换行
+            </p>
           </div>
-
-          {/* Text Input */}
-          <Textarea
-            placeholder="粘贴文本内容（支持 Markdown）..."
-            className="flex-1 min-h-[300px] resize-none bg-secondary/50 border-border focus:border-primary"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-
-          {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button
-              variant="outline"
-              className="flex-1 gap-2"
-              onClick={handleFileUpload}
-            >
-              <Upload className="w-4 h-4" />
-              上传文件
-            </Button>
-            <Button
-              className="flex-1 gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={handleSubmit}
-              disabled={!text.trim()}
-            >
-              <Send className="w-4 h-4" />
-              开始审校
-            </Button>
-          </div>
-
-          <p className="text-xs text-muted-foreground text-center">
-            支持 PDF / Word / TXT 格式
-          </p>
         </div>
       </main>
 

@@ -36,7 +36,7 @@ const evolutionCards = [
 const Evolution = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header showBack />
+      <Header />
 
       <main className="flex-1 flex justify-center px-6 py-12">
         <div className="max-w-4xl w-full flex flex-col gap-14">
