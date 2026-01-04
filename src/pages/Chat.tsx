@@ -69,8 +69,10 @@ const leckieData: Record<string, LocaleData> = {
     you: "Me",
     thinking: "Reviewing your document, please wait...",
     score: "23/100",
-    review: "What is this mess? Incoherent logic, inconsistent terminology—readers will leave more confused than before. Rewrite it.",
-    reviewFire: "Absolute garbage. A zero would be generous. This isn't documentation, it's a waste of the reader's time. Delete and start over.",
+    review:
+      "What is this mess? Incoherent logic, inconsistent terminology—readers will leave more confused than before. Rewrite it.",
+    reviewFire:
+      "Absolute garbage. A zero would be generous. This isn't documentation, it's a waste of the reader's time. Delete and start over.",
     retryBtn: "😭 Try Again",
   },
   jp: {
@@ -88,7 +90,8 @@ const leckieData: Record<string, LocaleData> = {
     you: "私",
     thinking: "確認中です、しばらくお待ちください...",
     score: "23/100",
-    review: "これは何ですか？ロジックがめちゃくちゃで、用語も統一されていません。読者は余計に混乱するだけです。書き直してください。",
+    review:
+      "これは何ですか？ロジックがめちゃくちゃで、用語も統一されていません。読者は余計に混乱するだけです。書き直してください。",
     reviewFire: "最悪です。0点でも甘いくらい。これはドキュメントじゃない、読者の時間の無駄です。全部消してやり直し。",
     retryBtn: "😭 再挑戦",
   },
@@ -108,7 +111,8 @@ const leckieData: Record<string, LocaleData> = {
     thinking: "검토 중입니다. 잠시만 기다려 주세요...",
     score: "23/100",
     review: "이게 뭐예요? 논리도 엉망이고 용어도 제각각이네요. 독자는 더 헷갈릴 뿐이에요. 다시 쓰세요.",
-    reviewFire: "완전 쓰레기예요. 0점도 아까워요. 이건 문서가 아니라 독자 시간 낭비예요. 다 지우고 처음부터 다시 하세요.",
+    reviewFire:
+      "완전 쓰레기예요. 0점도 아까워요. 이건 문서가 아니라 독자 시간 낭비예요. 다 지우고 처음부터 다시 하세요.",
     retryBtn: "😭 다시 도전",
   },
   pt: {
@@ -126,8 +130,10 @@ const leckieData: Record<string, LocaleData> = {
     you: "Eu",
     thinking: "Revisando o documento, aguarde...",
     score: "23/100",
-    review: "O que é isso? Lógica confusa, terminologia inconsistente—o leitor vai sair mais perdido do que entrou. Reescreva.",
-    reviewFire: "Lixo total. Zero já seria generoso demais. Isso não é documentação, é desperdício de tempo do leitor. Apaga tudo e começa de novo.",
+    review:
+      "O que é isso? Lógica confusa, terminologia inconsistente—o leitor vai sair mais perdido do que entrou. Reescreva.",
+    reviewFire:
+      "Lixo total. Zero já seria generoso demais. Isso não é documentação, é desperdício de tempo do leitor. Apaga tudo e começa de novo.",
     retryBtn: "😭 Tentar Novamente",
   },
   id: {
@@ -146,7 +152,8 @@ const leckieData: Record<string, LocaleData> = {
     thinking: "Sedang meninjau dokumen, harap tunggu...",
     score: "23/100",
     review: "Ini apa? Logikanya berantakan, istilahnya tidak konsisten—pembaca malah tambah bingung. Tulis ulang.",
-    reviewFire: "Sampah total. Nol pun terlalu baik. Ini bukan dokumentasi, ini buang-buang waktu pembaca. Hapus semua dan mulai dari awal.",
+    reviewFire:
+      "Sampah total. Nol pun terlalu baik. Ini bukan dokumentasi, ini buang-buang waktu pembaca. Hapus semua dan mulai dari awal.",
     retryBtn: "😭 Coba Lagi",
   },
 };
@@ -161,8 +168,54 @@ const Chat = () => {
 
   const leckie = leckieData[locale] || leckieData.cn;
 
-  const handleFileUpload = () => {
-    console.log("File upload triggered");
+  // const handleFileUpload = () => {
+  //   console.log("File upload triggered");
+  // };
+  const [file, setFile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  // 触发隐藏的 input 选择文件
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // 选择文件后自动上传
+  const handleFileChange = async (event) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
+
+    setFile(selectedFile);
+
+    await handleFileUpload(selectedFile);
+  };
+
+  const handleFileUpload = async (uploadFile) => {
+    if (!uploadFile) {
+      console.warn("没有选择文件！");
+      return;
+    }
+
+    const apiKey = "{api_key}";
+
+    const formData = new FormData();
+    formData.append("file", uploadFile, uploadFile.name);
+    formData.append("user", "abc-123");
+
+    try {
+      const response = await fetch("http://api.dify.woa.com/v1/files/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+      console.log("上传成功", result);
+      // 这里你可以执行上传成功后的逻辑，比如通知父组件，重置状态等
+    } catch (err) {
+      console.error("上传失败", err);
+    }
   };
 
   const handleRetry = () => {
@@ -179,7 +232,7 @@ const Chat = () => {
       setText("");
       setHasSubmitted(true);
       setIsThinking(true);
-      
+
       // Simulate API call with thinking state
       setTimeout(() => {
         setIsThinking(false);
@@ -204,16 +257,15 @@ const Chat = () => {
           {/* Character Image with cyberpunk border effect */}
           <div className="relative w-48 h-48 md:w-56 md:h-56 mb-6">
             {/* Outer glow ring */}
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-primary/30 via-transparent to-primary/20 animate-pulse" style={{ animationDuration: '3s' }} />
+            <div
+              className="absolute -inset-2 rounded-full bg-gradient-to-br from-primary/30 via-transparent to-primary/20 animate-pulse"
+              style={{ animationDuration: "3s" }}
+            />
             {/* Border ring */}
             <div className="absolute -inset-1 rounded-full border border-primary/40" />
             {/* Image container */}
             <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-primary/60 bg-secondary">
-              <img 
-                src={leckie.portrait} 
-                alt={leckie.label}
-                className="w-full h-full object-cover"
-              />
+              <img src={leckie.portrait} alt={leckie.label} className="w-full h-full object-cover" />
             </div>
             {/* Corner accents */}
             <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary" />
@@ -244,9 +296,7 @@ const Chat = () => {
                 <div className="flex-1 pt-1">
                   <p className="text-xs text-muted-foreground mb-2">{leckie.label}</p>
                   <div className="bg-card rounded-2xl rounded-tl-md px-5 py-4 inline-block max-w-lg border border-border shadow-card">
-                    <p className="text-base leading-relaxed">
-                      {fireMode ? leckie.openingFire : leckie.opening}
-                    </p>
+                    <p className="text-base leading-relaxed">{fireMode ? leckie.openingFire : leckie.opening}</p>
                   </div>
                 </div>
               </div>
@@ -267,9 +317,7 @@ const Chat = () => {
                     </div>
                   )}
                   <div className={`flex-1 pt-1 ${msg.role === "user" ? "text-right" : ""}`}>
-                    {msg.role === "leckie" && (
-                      <p className="text-xs text-muted-foreground mb-2">{leckie.label}</p>
-                    )}
+                    {msg.role === "leckie" && <p className="text-xs text-muted-foreground mb-2">{leckie.label}</p>}
                     <div
                       className={`rounded-2xl px-5 py-4 inline-block max-w-lg border shadow-card ${
                         msg.role === "user"
@@ -335,11 +383,13 @@ const Chat = () => {
               ) : (
                 <>
                   <div className="flex gap-3">
+                    <input type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
+
                     <Button
                       variant="outline"
                       size="icon"
                       className="flex-shrink-0 h-12 w-12"
-                      onClick={handleFileUpload}
+                      onClick={handleButtonClick}
                       disabled={hasSubmitted}
                     >
                       <Upload className="w-5 h-5" />
@@ -366,9 +416,7 @@ const Chat = () => {
                       <Send className="w-5 h-5" />
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground text-center mt-2">
-                    {leckie.supportedFormats}
-                  </p>
+                  <p className="text-xs text-muted-foreground text-center mt-2">{leckie.supportedFormats}</p>
                 </>
               )}
             </div>
