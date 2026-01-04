@@ -200,7 +200,7 @@ const Chat = () => {
     formData.append("user", "AI Leckie");
     console.log("上传成功");
 
-    // try {
+    try {
       // // const response = await fetch("https://1371739471-2931jvax9z.ap-guangzhou.tencentscf.com/upload", {
       // //   method: "POST",
       // //   body: formData,
@@ -214,21 +214,21 @@ const Chat = () => {
       //   body: formData,
       // });
       
-    //    const apiKey = 'app-iED3oMZNrWiKtXu5T5ASim2c'
-    //    const response = await fetch("http://api.dify.woa.com/v1/info", {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: `Bearer ${apiKey}`,
-    //     },
-    //     body: formData,
-    //   });
+       const apiKey = 'app-iED3oMZNrWiKtXu5T5ASim2c'
+       const response = await fetch("http://api.dify.woa.com/v1/info", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: formData,
+      });
 
-    //   const result = await response.json();
-    //   console.log("上传成功", result);
-    //   // 这里你可以执行上传成功后的逻辑，比如通知父组件，重置状态等
-    // } catch (err) {
-    //   console.error("上传失败", err);
-    // }
+      const result = await response.json();
+      console.log("上传成功", result);
+      // 这里你可以执行上传成功后的逻辑，比如通知父组件，重置状态等
+    } catch (err) {
+      console.error("上传失败", err);
+    }
   };
 
   const handleRetry = () => {
