@@ -200,8 +200,25 @@ const Chat = () => {
     formData.append("user", "AI Leckie");
 
     try {
-      const response = await fetch("https://1371739471-2931jvax9z.ap-guangzhou.tencentscf.com/upload", {
-        method: "POST",
+      // // const response = await fetch("https://1371739471-2931jvax9z.ap-guangzhou.tencentscf.com/upload", {
+      // //   method: "POST",
+      // //   body: formData,
+      // // });
+      // const apiKey = 'app-iED3oMZNrWiKtXu5T5ASim2c'
+      //  const response = await fetch("http://api.dify.woa.com/v1/info", {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: `Bearer ${apiKey}`,
+      //   },
+      //   body: formData,
+      // });
+      
+       const apiKey = 'app-iED3oMZNrWiKtXu5T5ASim2c'
+       const response = await fetch("http://api.dify.woa.com/v1/info", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
         body: formData,
       });
 
