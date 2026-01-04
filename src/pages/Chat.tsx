@@ -195,18 +195,13 @@ const Chat = () => {
       return;
     }
 
-    const apiKey = "app-iED3oMZNrWiKtXu5T5ASim2c";
-
     const formData = new FormData();
     formData.append("file", uploadFile, uploadFile.name);
     formData.append("user", "AI Leckie");
 
     try {
-      const response = await fetch("http://api.dify.woa.com/v1/files/upload", {
+      const response = await fetch("https://1371739471-2931jvax9z.ap-guangzhou.tencentscf.com/upload", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-        },
         body: formData,
       });
 
