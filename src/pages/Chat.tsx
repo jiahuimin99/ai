@@ -219,8 +219,7 @@ const Chat = () => {
         method: "GET",
         headers: {
           Authorization: `Bearer ${apiKey}`,
-        },
-        body: formData,
+        }
       });
 
       const result = await response.json();
