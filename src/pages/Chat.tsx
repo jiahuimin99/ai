@@ -195,11 +195,11 @@ const Chat = () => {
       return;
     }
 
-    const apiKey = "{api_key}";
+    const apiKey = "app-iED3oMZNrWiKtXu5T5ASim2c";
 
     const formData = new FormData();
     formData.append("file", uploadFile, uploadFile.name);
-    formData.append("user", "abc-123");
+    formData.append("user", "AI Leckie");
 
     try {
       const response = await fetch("http://api.dify.woa.com/v1/files/upload", {
